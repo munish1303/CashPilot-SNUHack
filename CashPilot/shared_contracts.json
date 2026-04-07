@@ -1,0 +1,102 @@
+{
+    "ingestion_event": {
+        "source": "GEMINI_VISION_OCR",
+        "raw_text_reference": "Home Depot Store #4492...",
+        "parsed_data": {
+            "entity_name": "Home Depot",
+            "entity_type": "VENDOR",
+            "amount": -345.50,
+            "due_date": "2026-03-30"
+        },
+        "reconciliation_confidence": 0.98
+    }
+}
+
+{
+    "global_state": {
+        "simulated_as_of": "2026-03-25",
+        "plaid_balance": 12450.00,
+        "phantom_usable_cash": 4100.00,
+        "locked_tier_0_funds": 8350.00,
+        "runway_metrics": {
+            "days_to_zero": 8,
+            "liquidity_breach_date": "2026-04-02",
+            "monte_carlo_survival_prob": 0.12
+        },
+        "cashflow_projection_array": [
+            {
+                "date": "2026-03-25",
+                "balance": 4100.00
+            },
+            {
+                "date": "2026-03-26",
+                "balance": 4100.00
+            },
+            {
+                "date": "2026-03-27",
+                "balance": -200.00
+            }
+        ]
+    }
+}
+
+
+{
+    "solver_directive": {
+        "breach_amount": -200.00,
+        "optimization_result": [
+            {
+                "obligation_id": "ob_992",
+                "entity_name": "Acme Supplies",
+                "original_due": "2026-03-27",
+                "math_decision": "FRACTIONAL_PAYMENT",
+                "pay_now_amount": 100.00,
+                "delay_amount": 300.00,
+                "requested_extension_days": 7
+            }
+        ]
+    }
+}
+
+{
+    "action_item": {
+        "id": "act_001",
+        "status": "PENDING_APPROVAL",
+        "title": "Fractionalize Acme Supplies Payment",
+        "chain_of_thought": [
+            "Projected shortfall of $200 on March 27th.",
+            "Acme Supplies is Tier 2 (Flexible) with 95/100 Goodwill.",
+            "Paying $100 today prevents overdraft while maintaining vendor trust."
+        ],
+        "execution_type": "GMAIL_NEGOTIATION",
+        "payload": {
+            "to": "billing@acme.com",
+            "subject": "Invoice #442 - Partial Payment",
+            "body": "Hi Acme team, we are remitting $100.00 today..."
+        }
+    }
+}
+
+{
+    "trigger_execution": {
+        "action_id": "act_001",
+        "execution_type": "GMAIL_NEGOTIATION",
+        "approved_by_user": true,
+        "timestamp": "2026-03-25T14:30:00Z"
+    }
+}
+
+{
+    "inbound_communication": {
+        "source": "GMAIL_WEBHOOK",
+        "agent_thread_id": "thread_8829_acme",
+        "sender": "billing@acme.com",
+        "received_at": "2026-03-25T16:00:00Z",
+        "raw_text": "We cannot accept $100. We need at least $200 remitted today.",
+        "extracted_intent": {
+            "is_agreement": false,
+            "counter_offer_detected": true,
+            "requested_amount": 200.00
+        }
+    }
+}
